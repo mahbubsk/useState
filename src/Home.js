@@ -4,12 +4,20 @@ import BlogLists from './BlogLists';
 const Home = () => {
   
   const [blogs, setBlogs] = useState(null)
+  const [isPending, setIsPending] = useState(true);
 
+  const dFlex = {
+    display:'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height:'80vh'
+  }
 
-
-  const handleDelete = (id) => {
-    const newBlogs = blogs.filter(blog=>blog.id !== id);
-    setBlogs(newBlogs);
+  const spinner = {
+    backgroundColor:'#2A9876',
+    color:'#fff',
+    borderRadius:'5px',
+    padding:'10px'
   }
 
  
@@ -20,13 +28,19 @@ const Home = () => {
       })
       .then((data) => {
         setBlogs(data);
+        setIsPending(false);
       })
   },[]);
   
   
   return (
       <div className="home">
-        {blogs && <BlogLists blogsData={blogs} title={"All The Blogs Here!!"} handleDelete={handleDelete}/>}
+        { isPending && 
+          <div style={dFlex}>
+              <span style={spinner}>loading....</span>
+          </div>
+        }
+        {blogs && <BlogLists blogs={blogs} title={"All The Blogs Here!!"}/>}
       </div>
   );
 }
